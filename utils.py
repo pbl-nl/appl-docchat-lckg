@@ -1,7 +1,6 @@
 """
 The utils module contains general functionality that can be used at various places in the application
 """
-# imports
 from typing import Any, Dict, List, Tuple
 import os
 import sys
@@ -12,6 +11,8 @@ from loguru import logger
 from langdetect import detect, LangDetectException
 import psutil
 import keyboard
+import pickle
+import networkx as nx
 # local imports
 import settings
 
@@ -23,6 +24,7 @@ VALID_EXTENSIONS = [
     ".txt"
 ]
 
+# languages supported by nltk
 LANGUAGE_MAP = {
     'cs': 'czech',
     'da': 'danish',
@@ -41,7 +43,7 @@ LANGUAGE_MAP = {
     'es': 'spanish',
     'sv': 'swedish',
     'tr': 'turkish'
-}  # languages supported by nltk
+} 
 
 
 def create_vectordb_folder(my_folder_path_selected: str) -> None:
@@ -72,15 +74,15 @@ def create_summaries_folder(my_folder_path_selected: str) -> None:
 
 
 def create_vectordb_path(content_folder_path: str,
-                         retriever_type: str = None,
-                         embeddings_provider: str = None,
-                         embeddings_model: str = None,
-                         text_splitter_method: str = None,
-                         chunk_size: int = None,
-                         chunk_overlap: int = None,
-                         text_splitter_method_child: str = None,
-                         chunk_size_child: int = None,
-                         chunk_overlap_child: int = None) -> str:
+                         retriever_type: str = None, # type: ignore
+                         embeddings_provider: str = None, # type: ignore
+                         embeddings_model: str = None, # type: ignore
+                         text_splitter_method: str = None, # type: ignore
+                         chunk_size: int = None, # type: ignore
+                         chunk_overlap: int = None, # type: ignore
+                         text_splitter_method_child: str = None, # type: ignore
+                         chunk_size_child: int = None, # type: ignore
+                         chunk_overlap_child: int = None) -> str: # type: ignore
     """
     Creates the full path for the vectorstore
 
@@ -116,22 +118,80 @@ def create_vectordb_path(content_folder_path: str,
     embeddings_provider = settings.EMBEDDINGS_PROVIDER if embeddings_provider is None else embeddings_provider
     embeddings_model = settings.EMBEDDINGS_MODEL if embeddings_model is None else embeddings_model
     text_splitter_method = settings.TEXT_SPLITTER_METHOD if text_splitter_method is None else text_splitter_method
-    chunk_size = str(settings.CHUNK_SIZE) if chunk_size is None else str(chunk_size)
-    chunk_overlap = str(settings.CHUNK_OVERLAP) if chunk_overlap is None else str(chunk_overlap)
+    chunk_size = settings.CHUNK_SIZE if chunk_size is None else chunk_size
+    chunk_overlap = settings.CHUNK_OVERLAP if chunk_overlap is None else chunk_overlap
     text_splitter_method_child = settings.TEXT_SPLITTER_METHOD_CHILD if text_splitter_method_child is None else \
         text_splitter_method_child
-    chunk_size_child = str(settings.CHUNK_SIZE_CHILD) if chunk_size_child is None else str(chunk_size_child)
-    chunk_overlap_child = str(settings.CHUNK_OVERLAP_CHILD) \
-        if chunk_overlap_child is None else str(chunk_overlap_child)
+    chunk_size_child = settings.CHUNK_SIZE_CHILD if chunk_size_child is None else chunk_size_child
+    chunk_overlap_child = settings.CHUNK_OVERLAP_CHILD if chunk_overlap_child is None else chunk_overlap_child
     # vectordb_name is created from retriever_type, embeddings_provider, embeddings_model, and
     # parent and child text_splitter_method, chunk_size and chunk_overlap
     vectordb_name = retriever_type + "_" + embeddings_provider + "_" + embeddings_model + "_" + \
-        text_splitter_method + "_" + chunk_size + "_" + chunk_overlap + "_" + text_splitter_method_child + "_" +\
-        chunk_size_child + "_" + chunk_overlap_child
+        text_splitter_method + "_" + str(chunk_size) + "_" + str(chunk_overlap) + "_" + text_splitter_method_child + "_" + \
+            str(chunk_size_child) + "_" + str(chunk_overlap_child)
 
     vectordb_folder_path = os.path.join(content_folder_path, "vector_stores", vectordb_name)
 
     return vectordb_folder_path
+
+
+def create_kg_folder_path(content_folder_path: str,
+                          llm_provider: str = None, # type: ignore
+                          llm_model: str = None, # type: ignore
+                          embeddings_provider: str = None, # type: ignore
+                          embeddings_model: str = None, # type: ignore
+                          text_splitter_method: str = None, # type: ignore
+                          chunk_size: int = None, # type: ignore
+                          chunk_overlap: int = None # type: ignore
+                          ) -> str:
+    """
+    Creates the full path for the knowledge graph
+
+    Parameters
+    ----------
+    content_folder_path : str
+        name of the content folder (including the path)
+    llm_provider : str, optional
+        name of the llm provider, by default None
+    llm_model : str, optional
+        name of the llm model, by default None
+    embeddings_provider : str, optional
+        name of the embeddings provider, by default None
+    embeddings_model : str, optional
+        name of the embeddings model, by default None
+    text_splitter_method : str, optional
+        name of the text splitter method, by default None
+    chunk_size : int, optional
+        the maximum chunk size, by default None
+    chunk_overlap : int, optional
+        the chunk overlap, by default None
+
+    Returns
+    -------
+    str
+        knowledge graph path
+    """
+    # retriever_type = settings.RETRIEVER_TYPE if retriever_type is None else retriever_type
+    llm_provider = settings.LLM_PROVIDER if llm_provider is None else llm_provider
+    llm_model = settings.LLM_MODEL if llm_model is None else llm_model
+    embeddings_provider = settings.EMBEDDINGS_PROVIDER if embeddings_provider is None else embeddings_provider
+    embeddings_model = settings.EMBEDDINGS_MODEL if embeddings_model is None else embeddings_model
+    text_splitter_method = settings.TEXT_SPLITTER_METHOD if text_splitter_method is None else text_splitter_method
+    chunk_size = settings.CHUNK_SIZE if chunk_size is None else chunk_size
+    chunk_overlap = settings.CHUNK_OVERLAP if chunk_overlap is None else chunk_overlap
+    # knowledge graph folder_name is created from llm_provider, llm_model, embeddings_provider, embeddings_model, 
+    # text_splitter_method, chunk_size and chunk_overlap
+    kg_folder_name = llm_provider + "_" + llm_model  + "_" + embeddings_provider + "_" + embeddings_model + "_" + \
+        text_splitter_method + "_" + str(chunk_size) + "_" + str(chunk_overlap)
+
+    if "knowledge_graphs" not in os.listdir(content_folder_path):
+        os.mkdir(os.path.join(content_folder_path, "knowledge_graphs"))
+    if kg_folder_name not in os.listdir(os.path.join(content_folder_path, "knowledge_graphs")):
+        os.mkdir(os.path.join(content_folder_path, "knowledge_graphs", kg_folder_name))
+
+    kg_folder_path = os.path.join(content_folder_path, "knowledge_graphs", kg_folder_name)
+
+    return kg_folder_path
 
 
 def is_relevant_file(content_folder_path: str, document_selection: List[str], my_file: str) -> bool:
@@ -166,7 +226,9 @@ def is_relevant_file(content_folder_path: str, document_selection: List[str], my
     return relevant
 
 
-def get_relevant_files_in_folder(content_folder_path: str, document_selection: List[str] = None) -> List[str]:
+def get_relevant_files_in_folder(content_folder_path: str,
+                                 document_selection: List[str] = None # type: ignore
+                                 ) -> List[str]:
     """
     Gets a list of relevant files from a given content folder path
 
@@ -429,3 +491,19 @@ def check_size(content_folder, document_selection):
         size += os.path.getsize(os.path.join(content_folder, file))
     size = size / 1024 / 1024  # convert to MB
     return size
+
+
+def get_graph(kg_path: str) -> nx.MultiDiGraph:
+    """
+    Obtains a pickled graph object from kg_path
+    Parameters
+    ----------
+    kg_path : str
+        the folder that contains the pickled graph object
+    Returns
+    -------
+    nx.MultiDiGraph
+        the networkx graph object
+    """
+    with open(kg_path, 'rb') as f:
+        return pickle.load(f)
