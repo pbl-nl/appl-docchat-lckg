@@ -1,0 +1,10 @@
+[theme]
+base="light"
+primaryColor="#5a9a4a"
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#929633"
+font="sans serif"
+
+#prevent gathering streamlit user statistics
+[browser]
+gatherUsageStats = false
