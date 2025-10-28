@@ -1,0 +1,225 @@
+conda create --name appl-docchat-new python=3.11
+pip install langchain[llms]     	# for communication with LLMs
+pip install loguru              	# for logging
+pip install python-dotenv       	# for storage of API keys
+pip install pypdf               	# for parsing pdf files
+pip install openai              	# for using openai API
+pip install chromadb            	# for vector database
+pip install nltk                	# needed for nltk text splitter
+pip install tiktoken            	# needed for openai embeddings
+(pip install beautifulsoup4      	# for parsing html files)
+pip install lxml                	# for parsing html files
+X pip install unstructured        	# for parsing pdf files
+pip install pymupdf					# for parsing pdf files
+pip install python-docx         	# for parsing word files
+pip install datasets            	# for evaluation
+pip install langchain_openai    	# to get rid of deprecation warnings from langchain
+pip install ragas               	# for evaluation scores calculation
+pip install sentence-transformers	# for using Huggingface models
+pip install matplotlib              # for visualization of scatter plot (tsne.py)
+
+
+appl-docchat after issues with RAGAS 12 June 2024
+conda create --name appl-docchat-test python=3.11
+pip install ragas -> 0.1.9         	        # for evaluation scores calculation
+pip install loguru -> 0.7.2        	        # for logging
+pip install python-dotenv -> 1.0.1 	        # for storage of API keys
+pip install chromadb -> 0.5.0      	        # for vector database
+pip install nltk -> 3.8.1         	        # needed for nltk text splitter
+pip install lxml -> 5.2.2          	        # for parsing html files
+pip install pymupdf	-> 1.24.5		        # for parsing pdf files
+pip install python-docx -> 1.1.2   	        # for parsing word files
+pip install sentence-transformers -> 3.0.1  # for using Huggingface models
+pip install streamlit -> 1.35.0             # for User Interface
+pip install langdetect -> 1.0.9             # for detection of language in documents
+pip install unstructured -> 0.14.5          # needed for Word file ingestion
+pip install rank_bm25 -> 0.2.2              # for hybrid search
+
+######## NOT USED #########
+appl-docchat-azure EXTRA VOOR AZURE
+conda create --name appl-docchat-azure --clone appl-docchat
+pip install azure-identity -> 1.17.1        # for connecting to Azure via DefaultAzureCredential
+
+######## NOT USED #########
+appl-docchat-rerank EXTRA VOOR FLASRANK RERANKING
+conda create --name appl-docchat-rerank --clone appl-docchat
+pip install flashrank -> 0.2.9              # for using flashrank rerankers
+pip install flashrank[listwise] -> llama-cpp-python-0.2.76      # for using listwise reranker model "rank_zephyr_7b_v1_full"
+!! Manual creation of subfolder flashrank_models and download and unpacking of reranking models from https://huggingface.co/prithivida/flashrank/tree/main in this subfolder was necessary
+!! Manual change in X:/user/troosts/conda/envs/appl-docchat-rerank/Lib/site-packages/flashrank/Config.py: default_cache_dir = "flashrank_models"
+
+appl-docchat-rerank-clean EXTRA VOOR FLASRANK RERANKING
+conda create --name appl-docchat-rerank-clean --clone appl-docchat
+pip install flashrank -> 0.2.9              # for using flashrank rerankers
+!! Manual creation of subfolder flashrank_models and download and unpacking of reranking models from https://huggingface.co/prithivida/flashrank/tree/main in this subfolder was necessary
+!! Manual change in X:/user/troosts/conda/envs/appl-docchat-rerank/Lib/site-packages/flashrank/Config.py: default_cache_dir = "flashrank_models"
+
+appl-docchat after implementation of flashrank reranker
+conda create --name appl-docchat-test python=3.11
+pip install ragas -> 0.1.9         	        # for evaluation scores calculation
+pip install loguru -> 0.7.2        	        # for logging
+pip install python-dotenv -> 1.0.1 	        # for storage of API keys
+pip install chromadb -> 0.5.0      	        # for vector database
+pip install nltk -> 3.8.1         	        # needed for nltk text splitter
+pip install lxml -> 5.2.2          	        # for parsing html files
+pip install pymupdf	-> 1.24.5		        # for parsing pdf files
+pip install python-docx -> 1.1.2   	        # for parsing word files
+pip install sentence-transformers -> 3.0.1  # for using Huggingface models
+pip install streamlit -> 1.35.0             # for User Interface
+pip install langdetect -> 1.0.9             # for detection of language in documents
+pip install unstructured -> 0.14.5          # needed for Word file ingestion
+pip install rank_bm25 -> 0.2.2              # for hybrid search
+pip install flashrank -> 0.2.9              # for flashrank reranker
+
+######## NOT USED #########
+EXTRA FOR CONVERSION OF ALL DOCUMENTS TO PDF DOCUMENTS
+pip install docx2pdf -> 0.1.8               # for conversion of word docs to pdf
+pip install fpdf2 -> 2.8.1                  # for conversion of txt docs to pdf
+pip install xhtml2pdf -> 0.2.16             # for conversion of html docs to pdf
+
+EXTRA FOR CONVERSION OF WORD DOCUMENTS TO PDF DOCUMENTS
+pip install docx2pdf -> 0.1.8               # for conversion of word docs to pdf
+
+EXTRA FOR EXITING THE GUI
+pip install keyboard
+pip install psutil
+
+EXTRA FOR SEMANTIC CHUNKING
+pip install langchain_experimental         !! fails because langchain-openai 0.1.8 requires langchain-core<0.3,>=0.2.2	but langchain-core 0.3.29 is installed
+
+07JAN2025: BUILD UP ENVIRONMENT FROM THE GROUND
+conda create --name appl-docchat-semchunking python=3.12
+pip install langchain_experimental -> 0.3.4 # needed for semantic chunking. Also installs langchain 0.3.14, langchain-community 0.3.14, langchain-core 0.3.29, langchain-text-splitters 0.3.4
+pip install ragas -> 0.2.9					# for evaluation scores calculation. Also installs langchain_openai-0.2.14
+pip install loguru -> 0.7.3					# for logging
+pip install chromadb -> 0.6.2      	        # for vector database
+pip install nltk -> 3.9.1         	        # needed for nltk text splitter
+pip install lxml -> 5.3.0          	        # for parsing html files
+pip install pymupdf	-> 1.25.1		        # for parsing pdf files
+pip install python-docx -> 1.1.2   	        # for parsing word files
+pip install sentence-transformers -> 3.3.1  # for using Huggingface models
+pip install streamlit -> 1.41.1             # for User Interface
+pip install langdetect -> 1.0.9             # for detection of language in documents
+pip install rank_bm25 -> 0.2.2              # for hybrid search
+pip install flashrank -> 0.2.10             # for flashrank reranker
+pip install docx2pdf -> 0.1.8               # for conversion of word docs to pdf
+pip install keyboard -> 0.13.5				# for exiting the GUI
+pip install psutil -> 6.1.1		     		# for exiting the GUI
+pip install beautifulsoup4 -> 4.12.3		# for html file ingestion
+pip install unstructured -> 0.16.12         # needed for Word file ingestion
+pip install langchain-chroma -> 0.2.0       # because The class `Chroma` was deprecated in LangChain 0.2.9
+!! ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+transformers 4.47.1 requires tokenizers<0.22,>=0.21, but you have tokenizers 0.20.3 which is incompatible.
+Successfully installed chromadb-0.5.23 langchain-chroma-0.2.0 tokenizers-0.20.3
+
+
+10JAN2025: BUILD UP ENVIRONMENT FROM THE GROUND
+conda create --name appl-docchat-sem python=3.12
+
+pip install langchain_experimental -> 0.3.4 # needed for semantic chunking. Also installs langchain 0.3.14, langchain-community 0.3.14, langchain-core 0.3.29, langchain-text-splitters 0.3.4
+Installing collected packages: urllib3, typing-extensions, tenacity, sniffio, PyYAML, python-dotenv, propcache, packaging, orjson, numpy, mypy-extensions, multidict, jsonpointer, idna, httpx-sse, h11, greenlet, frozenlist, charset-normalizer, certifi, attrs, annotated-types, aiohappyeyeballs, yarl, typing-inspect, SQLAlchemy, requests, pydantic-core, marshmallow, jsonpatch, httpcore, anyio, aiosignal, requests-toolbelt, pydantic, httpx, dataclasses-json, aiohttp, pydantic-settings, langsmith, langchain-core, langchain-text-splitters, langchain, langchain-community, langchain_experimental
+Successfully installed PyYAML-6.0.2 SQLAlchemy-2.0.37 aiohappyeyeballs-2.4.4 aiohttp-3.11.11 aiosignal-1.3.2 annotated-types-0.7.0 anyio-4.8.0 attrs-24.3.0 certifi-2024.12.14 charset-normalizer-3.4.1 dataclasses-json-0.6.7 frozenlist-1.5.0 greenlet-3.1.1 h11-0.14.0 httpcore-1.0.7 httpx-0.28.1 httpx-sse-0.4.0 idna-3.10 jsonpatch-1.33 jsonpointer-3.0.0 langchain-0.3.14 langchain-community-0.3.14 langchain-core-0.3.29 langchain-text-splitters-0.3.5 langchain_experimental-0.3.4 langsmith-0.2.10 marshmallow-3.25.0 multidict-6.1.0 mypy-extensions-1.0.0 numpy-2.2.1 orjson-3.10.14 packaging-24.2 propcache-0.2.1 pydantic-2.10.5 pydantic-core-2.27.2 pydantic-settings-2.7.1 python-dotenv-1.0.1 requests-2.32.3 requests-toolbelt-1.0.0 sniffio-1.3.1 tenacity-9.0.0 typing-extensions-4.12.2 typing-inspect-0.9.0 urllib3-2.3.0 yarl-1.18.3
+
+pip install langchain-chroma -> 0.2.0       # because The class `Chroma` was deprecated in LangChain 0.2.9
+Installing collected packages: pypika, mpmath, monotonic, flatbuffers, durationpy, zipp, wrapt, websockets, websocket-client, sympy, six, shellingham, pyreadline3, pyproject_hooks, pygments, pyasn1, protobuf, overrides, opentelemetry-util-http, oauthlib, numpy, mmh3, mdurl, importlib-resources, httptools, grpcio, fsspec, filelock, colorama, cachetools, bcrypt, backoff, asgiref, watchfiles, tqdm, starlette, rsa, requests-oauthlib, python-dateutil, pyasn1-modules, opentelemetry-proto, markdown-it-py, importlib-metadata, humanfriendly, googleapis-common-protos, deprecated, click, chroma-hnswlib, build, uvicorn, rich, posthog, opentelemetry-exporter-otlp-proto-common, opentelemetry-api, huggingface-hub, google-auth, fastapi, coloredlogs, typer, tokenizers, opentelemetry-semantic-conventions, onnxruntime, kubernetes, opentelemetry-sdk, opentelemetry-instrumentation, opentelemetry-instrumentation-asgi, opentelemetry-exporter-otlp-proto-grpc, opentelemetry-instrumentation-fastapi, chromadb, langchain-chroma
+  Attempting uninstall: numpy
+    Found existing installation: numpy 2.2.1
+    Uninstalling numpy-2.2.1:
+      Successfully uninstalled numpy-2.2.1
+Successfully installed asgiref-3.8.1 backoff-2.2.1 bcrypt-4.2.1 build-1.2.2.post1 cachetools-5.5.0 chroma-hnswlib-0.7.6 chromadb-0.5.23 click-8.1.8 colorama-0.4.6 coloredlogs-15.0.1 deprecated-1.2.15 durationpy-0.9 fastapi-0.115.6 filelock-3.16.1 flatbuffers-24.12.23 fsspec-2024.12.0 google-auth-2.37.0 googleapis-common-protos-1.66.0 grpcio-1.69.0 httptools-0.6.4 huggingface-hub-0.27.1 humanfriendly-10.0 importlib-metadata-8.5.0 importlib-resources-6.5.2 kubernetes-31.0.0 langchain-chroma-0.2.0 markdown-it-py-3.0.0 mdurl-0.1.2 mmh3-5.0.1 monotonic-1.6 mpmath-1.3.0 numpy-1.26.4 oauthlib-3.2.2 onnxruntime-1.20.1 opentelemetry-api-1.29.0 opentelemetry-exporter-otlp-proto-common-1.29.0 opentelemetry-exporter-otlp-proto-grpc-1.29.0 opentelemetry-instrumentation-0.50b0 opentelemetry-instrumentation-asgi-0.50b0 opentelemetry-instrumentation-fastapi-0.50b0 opentelemetry-proto-1.29.0 opentelemetry-sdk-1.29.0 opentelemetry-semantic-conventions-0.50b0 opentelemetry-util-http-0.50b0 overrides-7.7.0 posthog-3.7.5 protobuf-5.29.3 pyasn1-0.6.1 pyasn1-modules-0.4.1 pygments-2.19.1 pypika-0.48.9 pyproject_hooks-1.2.0 pyreadline3-3.5.4 python-dateutil-2.9.0.post0 requests-oauthlib-2.0.0 rich-13.9.4 rsa-4.9 shellingham-1.5.4 six-1.17.0 starlette-0.41.3 sympy-1.13.3 tokenizers-0.20.3 tqdm-4.67.1 typer-0.15.1 uvicorn-0.34.0 watchfiles-1.0.4 websocket-client-1.8.0 websockets-14.1 wrapt-1.17.0 zipp-3.21.0
+
+pip install ragas -> 0.2.10					# for evaluation scores calculation. Also installs langchain_openai-0.2.14
+Installing collected packages: pytz, appdirs, xxhash, tzdata, regex, pysbd, pyarrow, nest-asyncio, jiter, fsspec, distro, diskcache, dill, tiktoken, pandas, multiprocess, openai, datasets, langchain_openai, ragas
+  Attempting uninstall: fsspec
+    Found existing installation: fsspec 2024.12.0
+    Uninstalling fsspec-2024.12.0:
+      Successfully uninstalled fsspec-2024.12.0
+Successfully installed appdirs-1.4.4 datasets-3.2.0 dill-0.3.8 diskcache-5.6.3 distro-1.9.0 fsspec-2024.9.0 jiter-0.8.2 langchain_openai-0.2.14 multiprocess-0.70.16 nest-asyncio-1.6.0 openai-1.59.6 pandas-2.2.3 pyarrow-18.1.0 pysbd-0.3.4 pytz-2024.2 ragas-0.2.10 regex-2024.11.6 tiktoken-0.8.0 tzdata-2024.2 xxhash-3.5.0
+
+pip install loguru -> 0.7.3					# for logging
+Installing collected packages: win32-setctime, loguru
+Successfully installed loguru-0.7.3 win32-setctime-1.2.0
+
+# pip install chromadb -> 0.6.2      	        # for vector database
+
+pip install nltk -> 3.9.1         	        # needed for nltk text splitter
+Installing collected packages: joblib, nltk
+Successfully installed joblib-1.4.2 nltk-3.9.1
+
+pip install lxml -> 5.3.0          	        # for parsing html files
+Installing collected packages: lxml
+Successfully installed lxml-5.3.0
+
+pip install pymupdf	-> 1.25.1		        # for parsing pdf files
+Installing collected packages: pymupdf
+Successfully installed pymupdf-1.25.1
+
+pip install python-docx -> 1.1.2   	        # for parsing word files
+Installing collected packages: python-docx
+Successfully installed python-docx-1.1.2
+
+pip install sentence-transformers -> 3.3.1  # for using Huggingface models
+Installing collected packages: threadpoolctl, sympy, scipy, safetensors, Pillow, networkx, MarkupSafe, scikit-learn, jinja2, torch, tokenizers, transformers, sentence-transformers
+  Attempting uninstall: sympy
+    Found existing installation: sympy 1.13.3
+    Uninstalling sympy-1.13.3:
+      Successfully uninstalled sympy-1.13.3
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.20.3
+    Uninstalling tokenizers-0.20.3:
+      Successfully uninstalled tokenizers-0.20.3
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+chromadb 0.5.23 requires tokenizers<=0.20.3,>=0.13.2, but you have tokenizers 0.21.0 which is incompatible.
+Successfully installed MarkupSafe-3.0.2 Pillow-11.1.0 jinja2-3.1.5 networkx-3.4.2 safetensors-0.5.2 scikit-learn-1.6.1 scipy-1.15.0 sentence-transformers-3.3.1 sympy-1.13.1 threadpoolctl-3.5.0 tokenizers-0.21.0 torch-2.5.1 transformers-4.48.0
+
+pip install streamlit -> 1.41.1             # for User Interface
+Installing collected packages: watchdog, tornado, toml, smmap, rpds-py, narwhals, blinker, referencing, pydeck, gitdb, jsonschema-specifications, gitpython, jsonschema, altair, streamlit
+Successfully installed altair-5.5.0 blinker-1.9.0 gitdb-4.0.12 gitpython-3.1.44 jsonschema-4.23.0 jsonschema-specifications-2024.10.1 narwhals-1.21.1 pydeck-0.9.1 referencing-0.35.1 rpds-py-0.22.3 smmap-5.0.2 streamlit-1.41.1 toml-0.10.2 tornado-6.4.2 watchdog-6.0.0
+
+pip install langdetect -> 1.0.9             # for detection of language in documents
+Installing collected packages: langdetect
+Successfully installed langdetect-1.0.9
+
+pip install rank_bm25 -> 0.2.2              # for hybrid search
+Installing collected packages: rank_bm25
+Successfully installed rank_bm25-0.2.2
+
+pip install flashrank -> 0.2.10             # for flashrank reranker
+Installing collected packages: flashrank
+Successfully installed flashrank-0.2.10
+
+pip install docx2pdf -> 0.1.8               # for conversion of word docs to pdf
+Installing collected packages: pywin32, docx2pdf
+Successfully installed docx2pdf-0.1.8 pywin32-308
+
+pip install keyboard -> 0.13.5				# for exiting the GUI
+Installing collected packages: keyboard
+Successfully installed keyboard-0.13.5
+
+pip install psutil -> 6.1.1		     		# for exiting the GUI
+Installing collected packages: psutil
+Successfully installed psutil-6.1.1
+
+pip install beautifulsoup4 -> 4.12.3		# for html file ingestion
+Installing collected packages: soupsieve, beautifulsoup4
+Successfully installed beautifulsoup4-4.12.3 soupsieve-2.6
+
+pip install langchain-huggingface -> 0.1.2  # for enabing the use of Huggingface models
+Installing collected packages: langchain-huggingface
+Successfully installed langchain-huggingface-0.1.2
+
+pip install pymupdf4llm           -> 0.0.17 # for pdf ingestion including tables
+Installing collected packages: pymupdf4llm
+Successfully installed pymupdf4llm-0.0.17
+
+pip install transformers==4.46.3  -> 4.46.3 # to repair the error that occurred after installing sentence-transformers
+Installing collected packages: tokenizers, transformers
+  Attempting uninstall: tokenizers
+    Found existing installation: tokenizers 0.21.0
+    Uninstalling tokenizers-0.21.0:
+      Successfully uninstalled tokenizers-0.21.0
+  Attempting uninstall: transformers
+    Found existing installation: transformers 4.47.1
+    Uninstalling transformers-4.47.1:
+      Successfully uninstalled transformers-4.47.1
+Successfully installed tokenizers-0.20.3 transformers-4.46.3
